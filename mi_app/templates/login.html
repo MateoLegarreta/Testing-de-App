@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Usuario"
+                value="{{ username if username else '' }}" required><br>
+
+            <div class="password-field">
+                <input type="password" id="password" name="password" placeholder="Contraseña"
+                    value="" required>
+                <button type="button" onclick="togglePassword('password')">👁</button>
+            </div>
+
+            {% if errores %}
+            <div class="errores">
+                <ul>
+                    {% for e in errores %}
+                        <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p>¿No tienes cuenta? <a href="{{ url_for('register') }}">Regístrate</a></p>
+    </div>
+
+    <script>
+    function togglePassword(id) {
+        let input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+    </script>
+</body>
+</html>
