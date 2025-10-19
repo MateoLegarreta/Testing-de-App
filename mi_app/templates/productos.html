@@ -2,14 +2,393 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Productos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - TechFlow Solutions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .productos-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .productos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .productos-header h2 {
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .filters-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .filter-group select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .producto-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .producto-nombre {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .producto-categoria {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .producto-precio {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-top: auto;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-results h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results p {
+            color: #718096;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .pagination button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-count {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Bienvenido {{ usuario }}</h2>
-        <p>Aquí iría la lista de productos 🚀</p>
-        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    <div class="productos-container">
+        <div class="productos-header">
+            <div>
+                <h2>Bienvenido, {{ usuario }}</h2>
+                <p style="color: #718096; margin-top: 0.5rem;">Gestiona tu catálogo de productos</p>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>
+        </div>
+
+        <div class="filters-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar productos por nombre...">
+            </div>
+            <div class="filter-group">
+                <label for="categoryFilter">Categoría:</label>
+                <select id="categoryFilter">
+                    <option value="">Todas</option>
+                    <option value="Electrónica">Electrónica</option>
+                    <option value="Ropa">Ropa</option>
+                    <option value="Hogar">Hogar</option>
+                    <option value="Deportes">Deportes</option>
+                    <option value="Libros">Libros</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortPrice">Ordenar:</label>
+                <select id="sortPrice">
+                    <option value="">Sin ordenar</option>
+                    <option value="asc">Precio: Menor a Mayor</option>
+                    <option value="desc">Precio: Mayor a Menor</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-count" id="resultsCount"></div>
+
+        <div class="productos-grid" id="productosGrid"></div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="no-results-icon">📦</div>
+            <h3>No se encontraron productos</h3>
+            <p>Intenta ajustar los filtros de búsqueda</p>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
     </div>
+
+    <script>
+        // Datos de ejemplo de productos
+        const todosLosProductos = [
+            { nombre: "Laptop Pro 15", categoria: "Electrónica", precio: 1299.99 },
+            { nombre: "Smartphone X", categoria: "Electrónica", precio: 899.99 },
+            { nombre: "Auriculares Bluetooth", categoria: "Electrónica", precio: 149.99 },
+            { nombre: "Camiseta Deportiva", categoria: "Ropa", precio: 29.99 },
+            { nombre: "Pantalón Casual", categoria: "Ropa", precio: 49.99 },
+            { nombre: "Zapatillas Running", categoria: "Deportes", precio: 89.99 },
+            { nombre: "Lámpara LED", categoria: "Hogar", precio: 39.99 },
+            { nombre: "Silla Ergonómica", categoria: "Hogar", precio: 199.99 },
+            { nombre: "Libro JavaScript", categoria: "Libros", precio: 34.99 },
+            { nombre: "Tablet 10 pulgadas", categoria: "Electrónica", precio: 349.99 },
+            { nombre: "Reloj Inteligente", categoria: "Electrónica", precio: 249.99 },
+            { nombre: "Chaqueta Invierno", categoria: "Ropa", precio: 79.99 },
+            { nombre: "Balón Fútbol", categoria: "Deportes", precio: 24.99 },
+            { nombre: "Alfombra Moderna", categoria: "Hogar", precio: 69.99 },
+            { nombre: "Libro Python", categoria: "Libros", precio: 39.99 },
+            { nombre: "Mouse Inalámbrico", categoria: "Electrónica", precio: 29.99 },
+            { nombre: "Teclado Mecánico", categoria: "Electrónica", precio: 119.99 },
+            { nombre: "Sudadera Capucha", categoria: "Ropa", precio: 44.99 },
+            { nombre: "Mancuernas 5kg", categoria: "Deportes", precio: 34.99 },
+            { nombre: "Espejo Decorativo", categoria: "Hogar", precio: 54.99 }
+        ];
+
+        let productosFiltrados = [...todosLosProductos];
+        let paginaActual = 1;
+        const productosPorPagina = 9;
+
+        function filtrarProductos() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoria = document.getElementById('categoryFilter').value;
+            const sortOrder = document.getElementById('sortPrice').value;
+
+            // Filtrar por búsqueda y categoría
+            productosFiltrados = todosLosProductos.filter(producto => {
+                const matchSearch = producto.nombre.toLowerCase().includes(searchTerm);
+                const matchCategory = !categoria || producto.categoria === categoria;
+                return matchSearch && matchCategory;
+            });
+
+            // Ordenar por precio
+            if (sortOrder === 'asc') {
+                productosFiltrados.sort((a, b) => a.precio - b.precio);
+            } else if (sortOrder === 'desc') {
+                productosFiltrados.sort((a, b) => b.precio - a.precio);
+            }
+
+            paginaActual = 1;
+            mostrarProductos();
+        }
+
+        function mostrarProductos() {
+            const grid = document.getElementById('productosGrid');
+            const noResults = document.getElementById('noResults');
+            const resultsCount = document.getElementById('resultsCount');
+
+            // Calcular productos para la página actual
+            const inicio = (paginaActual - 1) * productosPorPagina;
+            const fin = inicio + productosPorPagina;
+            const productosPagina = productosFiltrados.slice(inicio, fin);
+
+            if (productosFiltrados.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                resultsCount.textContent = '';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            resultsCount.textContent = `Mostrando ${inicio + 1}-${Math.min(fin, productosFiltrados.length)} de ${productosFiltrados.length} productos`;
+
+            grid.innerHTML = productosPagina.map(producto => `
+                <div class="producto-card">
+                    <div class="producto-nombre">${producto.nombre}</div>
+                    <span class="producto-categoria">${producto.categoria}</span>
+                    <div class="producto-precio">$${producto.precio.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            mostrarPaginacion();
+        }
+
+        function mostrarPaginacion() {
+            const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+            const paginationDiv = document.getElementById('pagination');
+
+            if (totalPaginas <= 1) {
+                paginationDiv.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual === 1 ? 'disabled' : ''}>
+                    ← Anterior
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPaginas; i++) {
+                if (i === 1 || i === totalPaginas || (i >= paginaActual - 1 && i <= paginaActual + 1)) {
+                    html += `
+                        <button onclick="cambiarPagina(${i})" class="${i === paginaActual ? 'active' : ''}">
+                            ${i}
+                        </button>
+                    `;
+                } else if (i === paginaActual - 2 || i === paginaActual + 2) {
+                    html += '<button disabled>...</button>';
+                }
+            }
+
+            html += `
+                <button onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual === totalPaginas ? 'disabled' : ''}>
+                    Siguiente →
+                </button>
+            `;
+
+            paginationDiv.innerHTML = html;
+        }
+
+        function cambiarPagina(pagina) {
+            paginaActual = pagina;
+            mostrarProductos();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filtrarProductos);
+        document.getElementById('categoryFilter').addEventListener('change', filtrarProductos);
+        document.getElementById('sortPrice').addEventListener('change', filtrarProductos);
+
+        // Inicializar
+        mostrarProductos();
+    </script>
 </body>
 </html>
