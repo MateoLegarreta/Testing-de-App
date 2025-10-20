@@ -5,218 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos - TechFlow Solutions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .productos-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .productos-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .productos-header h2 {
-            color: #2d3748;
-            margin: 0;
-        }
-
-        .logout-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .filters-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .filter-group label {
-            font-weight: 500;
-            color: #4a5568;
-        }
-
-        .filter-group select {
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            background: white;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        .filter-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .productos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .producto-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .producto-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .producto-nombre {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-        }
-
-        .producto-categoria {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
-            width: fit-content;
-        }
-
-        .producto-precio {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-top: auto;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 3rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .no-results-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .no-results h3 {
-            color: #4a5568;
-            margin-bottom: 0.5rem;
-        }
-
-        .no-results p {
-            color: #718096;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-        }
-
-        .pagination button {
-            padding: 0.5rem 1rem;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .pagination button:hover:not(:disabled) {
-            border-color: #667eea;
-            color: #667eea;
-        }
-
-        .pagination button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .results-count {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 1rem;
-        }
-    </style>
 </head>
 <body>
-    <div class="productos-container">
-        <div class="productos-header">
-            <div>
+    <nav class="productos-header">
+        <ul>
+            <li>
                 <h2>Bienvenido, {{ usuario }}</h2>
-                <p style="color: #718096; margin-top: 0.5rem;">Gestiona tu catálogo de productos</p>
-            </div>
-            <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>
-        </div>
+            </li>
+            <li>
+                <img src="../images/logo.jpg" alt="logo">
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>
+            </li>
+        </ul>
+    </nav>
 
+
+    <div class="productos-container">
         <div class="filters-section">
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 Buscar productos por nombre...">
@@ -320,14 +126,12 @@
             if (productosFiltrados.length === 0) {
                 grid.style.display = 'none';
                 noResults.style.display = 'block';
-                resultsCount.textContent = '';
                 document.getElementById('pagination').innerHTML = '';
                 return;
             }
 
             grid.style.display = 'grid';
             noResults.style.display = 'none';
-            resultsCount.textContent = `Mostrando ${inicio + 1}-${Math.min(fin, productosFiltrados.length)} de ${productosFiltrados.length} productos`;
 
             grid.innerHTML = productosPagina.map(producto => `
                 <div class="producto-card">
