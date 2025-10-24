@@ -13,7 +13,7 @@
                 <h2>Bienvenido, {{ usuario }}</h2>
             </li>
             <li>
-                <img src="../images/logo.jpg" alt="logo">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
             </li>
             <li>
                 <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar sesión</a>

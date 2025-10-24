@@ -186,30 +186,30 @@ p a:hover {
 
 .productos-header li{
   display: flex;
-  padding: 20px;
+  padding: 12px 20px;  
+  align-items: center;  
 }
-
 
 .productos-header h2 {
   color: white;
   margin: 0;
 }
 
-.productos-header img{
-  width: 100px;
-  height: 100px;
+.productos-header li{
+  display: flex;
+  padding: 12px 20px;  
+  align-items: center;  
 }
 
 .logout-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;  /* Cambia de 0.75rem 1.5rem a 0.5rem 1rem */
   border-radius: 8px;
   text-decoration: none;
   font-weight: 500;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .logout-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
