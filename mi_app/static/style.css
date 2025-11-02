@@ -20,6 +20,24 @@ body {
   text-align: center;
   max-width: 420px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 35rem;
+  margin-top: 10rem;
+}
+
+.register-container {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 35rem;
+  margin-top: 4rem;
 }
 
 .logo-container {
