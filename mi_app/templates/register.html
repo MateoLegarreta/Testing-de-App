@@ -17,7 +17,11 @@
 </head>
 <body>
     <div class="register-container">
+            <div class="logo-container">
+        <img class="logo" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
+    <h3 class="company-name">TechFlow</h3>
         <h2>Registro</h2>
+</div>
 
         <form method="POST">
             <input type="text" name="username" placeholder="Usuario"
